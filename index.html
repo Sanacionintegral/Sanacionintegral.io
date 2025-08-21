@@ -216,16 +216,19 @@
       var sticky = document.getElementById('ctaSticky');
 
       if (hero) hero.addEventListener('click', function(){
+         _pingClick('ctaHero');
         trackContact('CTA Hero – Sesión Holística');
         trackLead('CTA Hero – Sesión Holística', 18000);
       });
 
       if (func) func.addEventListener('click', function(){
+         _pingClick('ctaFuncionamiento');
         trackContact('CTA Funcionamiento – Lectura de cartas');
         trackLead('CTA Funcionamiento – Lectura de cartas', 12000);
       });
 
       if (sticky) sticky.addEventListener('click', function(){
+         _pingClick('ctaSticky');
         trackContact('CTA Sticky – Péndulo Karnak');
         trackLead('CTA Sticky – Péndulo Karnak', 12000);
       });
@@ -270,6 +273,35 @@
   } else {
     run(); // ya cargó el DOM, corré igual
   }
+})();
+</script>
+  <script>
+(function(){
+  function qs(name){
+    try { return new URL(location.href).searchParams.get(name) || '' } catch(e){ return '' }
+  }
+  function sendHit(buttonId){
+    var payload = {
+      event: 'cta_click',
+      page: location.href.split('#')[0],
+      button: buttonId,
+      utm_campaign: qs('utm_campaign'),
+      utm_adset: qs('utm_adset'),
+      utm_content: qs('utm_content'),
+      fbclid: qs('fbclid'),
+      gclid: qs('gclid'),
+      referrer: document.referrer || '',
+      ua: navigator.userAgent
+    };
+    var url = 'https://script.google.com/macros/s/AKfycbxLkKq-r1T6KRIuXdoJlAqJF6-fULaNSTLEV5ajF4a7z5A_ulrh4D8_79UDxU2ZXVpZUg/exec';
+    try {
+      var blob = new Blob([JSON.stringify(payload)], {type: 'application/json'});
+      if (navigator.sendBeacon && navigator.sendBeacon(url, blob)) return;
+    } catch(e){}
+    fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)}).catch(()=>{});
+  }
+  // Exponer para usar desde los listeners
+  window._pingClick = sendHit;
 })();
 </script>
 </body>
