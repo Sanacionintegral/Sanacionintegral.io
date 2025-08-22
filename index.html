@@ -200,53 +200,61 @@
   </footer>
 
   <!-- Tracking CTAs: Contact (sin valor) + Lead (con valor) -->
-  <script>
-    // Contact SIN valor + evento custom
-    function trackContact(label){
-      if (window.fbq) {
-        fbq('track','Contact',{ content_name: label });
-        fbq('trackCustom','CTA_Click',{ label });
-      }
+ <!-- Tracking CTAs: Contact (con valor + moneda) + Lead -->
+<script>
+  function trackContact(label, valueARS){
+    if (window.fbq) {
+      fbq('track','Contact', {
+        content_name: label,
+        value: valueARS,      // número (sin miles)
+        currency: 'ARS'       // ISO-4217
+      });
+      fbq('trackCustom','CTA_Click',{ label });
     }
+  }
 
-    // Lead CON valor coherente
-    function trackLead(label, valueARS){
-      if (window.fbq) {
-        fbq('track','Lead',{ content_name: label, value: valueARS, currency:'ARS' });
-      }
+  function trackLead(label, valueARS){
+    if (window.fbq) {
+      fbq('track','Lead', {
+        content_name: label,
+        value: valueARS,
+        currency: 'ARS'
+      });
     }
+  }
 
-    // Adjuntar listeners cuando el DOM está listo
-    document.addEventListener('DOMContentLoaded', function(){
-      var hero = document.getElementById('ctaHero');
-      var func = document.getElementById('ctaFuncionamiento');
-      var sticky = document.getElementById('ctaSticky');
-      var ig = document.getElementById('ctaIG');
+  document.addEventListener('DOMContentLoaded', function(){
+    var hero   = document.getElementById('ctaHero');
+    var func   = document.getElementById('ctaFuncionamiento');
+    var sticky = document.getElementById('ctaSticky');
+    var ig     = document.getElementById('ctaIG');
 
-      if (ig) ig.addEventListener('click', function(){
-         _pingClick('ctaIG');                 // manda el hit al Apps Script
-        trackContact('CTA IG – Mensaje');    // evento en Meta Pixel
-      });
-
-      if (hero) hero.addEventListener('click', function(){
-         _pingClick('ctaHero');
-        trackContact('CTA Hero – Sesión Holística');
-        trackLead('CTA Hero – Sesión Holística', 18000);
-      });
-
-      if (func) func.addEventListener('click', function(){
-         _pingClick('ctaFuncionamiento');
-        trackContact('CTA Funcionamiento – Lectura de cartas');
-        trackLead('CTA Funcionamiento – Lectura de cartas', 12000);
-      });
-
-      if (sticky) sticky.addEventListener('click', function(){
-         _pingClick('ctaSticky');
-        trackContact('CTA Sticky – Péndulo Karnak');
-        trackLead('CTA Sticky – Péndulo Karnak', 12000);
-      });
+    if (hero)  hero.addEventListener('click', function(){
+      _pingClick('ctaHero');
+      trackContact('CTA Hero – Sesión Holística', 18000);
+      trackLead('CTA Hero – Sesión Holística', 18000);
     });
-  </script>
+
+    if (func)  func.addEventListener('click', function(){
+      _pingClick('ctaFuncionamiento');
+      trackContact('CTA Funcionamiento – Lectura de cartas', 12000);
+      trackLead('CTA Funcionamiento – Lectura de cartas', 12000);
+    });
+
+    if (sticky) sticky.addEventListener('click', function(){
+      _pingClick('ctaSticky');
+      trackContact('CTA Sticky – Péndulo Karnak', 12000);
+      trackLead('CTA Sticky – Péndulo Karnak', 12000);
+    });
+
+    if (ig) ig.addEventListener('click', function(){
+      _pingClick('ctaIG');
+      trackContact('CTA IG – Mensaje', 12000);
+      // si no querés duplicar eventos, podés NO mandar Lead acá
+      // trackLead('CTA IG – Mensaje', 12000);
+    });
+  });
+</script>
 <script>
 (function () {
   function updateWA(id, ref) {
