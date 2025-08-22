@@ -103,11 +103,18 @@
     <h1>Sanación energética con <span style="color:var(--accent)">péndulo Karnak</span> + lectura de cartas</h1>
     <p class="sub">Te acompaño a liberar bloqueos, alinear tus chakras y recuperar tu paz interior. Todo por llamada de WhatsApp, desde donde estés.</p>
     <div class="hero-cta">
-      <a id="ctaHero" class="btn btn--wa" href="https://wa.me/5492235285338?text=Hola%20Clara%2C%20quiero%20reservar%20mi%20sesión%20de%20sanación%20energética%2011%3A11" rel="noopener" target="_blank">
-        💬 Reservar mi sesión por WhatsApp
-      </a>
-      <a class="btn btn--ghost" href="#como-funciona">Cómo funciona</a>
-    </div>
+  <a id="ctaHero" class="btn btn--wa" href="https://wa.me/5492235285338?text=Hola%20Clara%2C%20quiero%20reservar%20mi%20sesión%20de%20sanación%20energética%2011%3A11" rel="noopener" target="_blank">
+    💬 Reservar mi sesión por WhatsApp
+  </a>
+
+  <!-- NUEVO: botón Instagram -->
+  <a id="ctaIG" class="btn btn--ghost" href="https://ig.me/m/sanacion11.11" rel="noopener" target="_blank">
+    📩 Mensaje por Instagram
+  </a>
+
+  <a class="btn btn--ghost" href="#como-funciona">Cómo funciona</a>
+</div>
+
   </header>
 
   <main>
@@ -214,6 +221,12 @@
       var hero = document.getElementById('ctaHero');
       var func = document.getElementById('ctaFuncionamiento');
       var sticky = document.getElementById('ctaSticky');
+      var ig = document.getElementById('ctaIG');
+
+      if (ig) ig.addEventListener('click', function(){
+         _pingClick('ctaIG');                 // manda el hit al Apps Script
+        trackContact('CTA IG – Mensaje');    // evento en Meta Pixel
+      });
 
       if (hero) hero.addEventListener('click', function(){
          _pingClick('ctaHero');
