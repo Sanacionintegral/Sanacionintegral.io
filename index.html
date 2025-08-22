@@ -243,7 +243,6 @@
       var url = new URL(a.href);
       var current = url.searchParams.get('text') || '';
       var decoded = current ? decodeURIComponent(current) : '';
-      // si todavía no tiene Ref, la agregamos
       if (decoded.indexOf('Ref:') === -1) {
         var updated = decoded ? (decoded + '\n' + ref) : ref;
         url.searchParams.set('text', updated);
@@ -253,33 +252,34 @@
   }
 
   function run() {
-    var qs = new URLSearchParams(location.search);
-    var camp  = qs.get('utm_campaign') || '';      // opcional
+    var qs   = new URLSearchParams(location.search);
+    var camp = qs.get('utm_campaign') || '';
     var adset = qs.get('utm_adset') || 'direct';
     var ad    = qs.get('utm_content') || 'direct';
     var ref = 'Ref: ' + (camp ? (camp + ' | ') : '') + adset + ' | ' + ad;
 
     ['ctaHero','ctaFuncionamiento','ctaSticky'].forEach(function(id){
-      updateWA(id, ref); // actualiza al cargar
+      updateWA(id, ref);
       var el = document.getElementById(id);
-      if (el) {
-        el.addEventListener('click', function(){ updateWA(id, ref); }); // y por si acaso, al click
-      }
+      if (el) el.addEventListener('click', function(){ updateWA(id, ref); });
     });
   }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', run);
   } else {
-    run(); // ya cargó el DOM, corré igual
+    run();
   }
 })();
 </script>
-  <script>
+
+<!-- _pingClick: envía a Apps Script sin preflight -->
+<script>
 (function(){
   function qs(name){
     try { return new URL(location.href).searchParams.get(name) || '' } catch(e){ return '' }
   }
+
   function sendHit(buttonId){
     var payload = {
       event: 'cta_click',
@@ -293,14 +293,19 @@
       referrer: document.referrer || '',
       ua: navigator.userAgent
     };
+
     var url = 'https://script.google.com/macros/s/AKfycbxLkKq-r1T6KRIuXdoJlAqJF6-fULaNSTLEV5ajF4a7z5A_ulrh4D8_79UDxU2ZXVpZUg/exec';
+
     try {
-      var blob = new Blob([JSON.stringify(payload)], {type: 'application/json'});
+      var blob = new Blob([JSON.stringify(payload)], {type: 'text/plain;charset=UTF-8'});
       if (navigator.sendBeacon && navigator.sendBeacon(url, blob)) return;
     } catch(e){}
-    fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)}).catch(()=>{});
+
+    try {
+      fetch(url, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
+    } catch(e){}
   }
-  // Exponer para usar desde los listeners
+
   window._pingClick = sendHit;
 })();
 </script>
