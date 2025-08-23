@@ -266,30 +266,47 @@
 })();
 </script>
 
-<!-- Dispara SOLO el evento estándar Contact (con valor y moneda) -->
-<script>
-function fireContact(label, valueARS){
-  if (!window.fbq) return;
-  fbq('track','Contact', {
-    content_name: label,
-    value: Number(valueARS),
-    currency: 'ARS'
-  });
-  // opcional: custom para diagnóstico
-  fbq('trackCustom','CTA_Click', { label: label });
-}
+  <script>
+(function(){
+  // Mapea IDs -> etiqueta y precio
+  var MAP = {
+    ctaHero:            {label:'CTA Hero – Sesión Holística',             value:18000},
+    ctaFuncionamiento:  {label:'CTA Funcionamiento – Lectura de cartas',  value:12000},
+    ctaSticky:          {label:'CTA Sticky – Péndulo Karnak',             value:12000},
+    ctaIG:              {label:'CTA IG – Mensaje',                        value:12000}
+  };
 
-document.addEventListener('DOMContentLoaded', function(){
-  var hero   = document.getElementById('ctaHero');            // Sesión completa
-  var func   = document.getElementById('ctaFuncionamiento');  // Lectura cartas
-  var sticky = document.getElementById('ctaSticky');          // Péndulo
-  var ig     = document.getElementById('ctaIG');              // Instagram
+  // Encuentra el ID del CTA aunque el click sea en un <span> interno, etc.
+  function getBtnId(el){
+    while (el && el !== document){
+      if (el.id && MAP[el.id]) return el.id;
+      el = el.parentNode;
+    }
+    return null;
+  }
 
-  if (hero)   hero.addEventListener('click',  function(){ if (window._pingClick) _pingClick('ctaHero');          fireContact('CTA Hero – Sesión Holística', 18000); });
-  if (func)   func.addEventListener('click',  function(){ if (window._pingClick) _pingClick('ctaFuncionamiento'); fireContact('CTA Funcionamiento – Lectura de cartas', 12000); });
-  if (sticky) sticky.addEventListener('click',function(){ if (window._pingClick) _pingClick('ctaSticky');        fireContact('CTA Sticky – Péndulo Karnak', 12000); });
-  if (ig)     ig.addEventListener('click',     function(){ if (window._pingClick) _pingClick('ctaIG');            fireContact('CTA IG – Mensaje', 12000); });
-});
+  function fireContact(id){
+    if (!window.fbq || !MAP[id]) return;
+    var m = MAP[id];
+    fbq('track','Contact',{ content_name:m.label, value:Number(m.value), currency:'ARS' });
+    fbq('trackCustom','CTA_Click',{ label:m.label });
+    try { console.log('[pixel] Contact ->', id, m.value); } catch(e){}
+  }
+
+  // Enviá también a tu Apps Script si existe
+  function ping(id){
+    try { if (window._pingClick) _pingClick(id); } catch(e){}
+  }
+
+  // Delegación + captura: dispara SIEMPRE antes de que el navegador navegue
+  document.addEventListener('click', function(ev){
+    var id = getBtnId(ev.target);
+    if (!id) return;
+    ping(id);
+    fireContact(id);
+  }, true); // <- captura
+
+})();
 </script>
 </body>
 </html>
