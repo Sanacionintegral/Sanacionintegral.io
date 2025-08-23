@@ -34,13 +34,13 @@
     }
     header{ padding:48px 20px 24px; text-align:center; }
     header img.logo{
-  width: clamp(220px, 26vw, 420px);
-  height: auto;
-  object-fit: contain;
-  opacity: .95;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 4px 14px rgba(0,0,0,.35));
-}
+      width: clamp(220px, 26vw, 420px);
+      height: auto;
+      object-fit: contain;
+      opacity: .95;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,.35));
+    }
     h1{ margin:8px 0 8px; font-size: clamp(26px, 3.5vw, 40px); letter-spacing:.3px; }
     .eyebrow{ color:var(--muted); font-weight:600; text-transform:uppercase; font-size:12px; letter-spacing:.18em; }
     .sub{ max-width:820px; margin:8px auto 0; color:#eee; opacity:.9; font-size:clamp(16px,2.2vw,18px) }
@@ -75,7 +75,7 @@
     .muted{ opacity:.75 }
   </style>
 
-  <!-- Meta Pixel (solo una vez, en el <head>) -->
+  <!-- Meta Pixel -->
   <script>
     !function(f,b,e,v,n,t,s){
       if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -102,19 +102,19 @@
     <div class="eyebrow">Sesiones energetica a distancia • No es un curso</div>
     <h1>Sanación energética con <span style="color:var(--accent)">péndulo Karnak</span> + lectura de cartas</h1>
     <p class="sub">Te acompaño a liberar bloqueos, alinear tus chakras y recuperar tu paz interior. Todo por llamada de WhatsApp, desde donde estés.</p>
+
     <div class="hero-cta">
-  <a id="ctaHero" class="btn btn--wa" href="https://wa.me/5492235285338?text=Hola%20Clara%2C%20quiero%20reservar%20mi%20sesión%20de%20sanación%20energética%2011%3A11" rel="noopener" target="_blank">
-    💬 Reservar mi sesión por WhatsApp
-  </a>
+      <a id="ctaHero" class="btn btn--wa" href="https://wa.me/5492235285338?text=Hola%20Clara%2C%20quiero%20reservar%20mi%20sesión%20de%20sanación%20energética%2011%3A11" rel="noopener" target="_blank">
+        💬 Reservar mi sesión por WhatsApp
+      </a>
 
-  <!-- NUEVO: botón Instagram -->
-  <a id="ctaIG" class="btn btn--ghost" href="https://ig.me/m/sanacion11.11" rel="noopener" target="_blank">
-    📩 Mensaje por Instagram
-  </a>
+      <!-- Botón Instagram (opcional) -->
+      <a id="ctaIG" class="btn btn--ghost" href="https://ig.me/m/sanacion11.11" rel="noopener" target="_blank">
+        📩 Mensaje por Instagram
+      </a>
 
-  <a class="btn btn--ghost" href="#como-funciona">Cómo funciona</a>
-</div>
-
+      <a class="btn btn--ghost" href="#como-funciona">Cómo funciona</a>
+    </div>
   </header>
 
   <main>
@@ -153,18 +153,18 @@
     </div>
 
     <section class="wrap card" style="margin-top:18px">
-  <h2>Importante</h2>
-  <p>
-    <span class="badge">No es un curso</span>
-    <strong>Sanar es un camino compartido.</strong> Yo sostengo la técnica y la energía; vos ponés tu apertura y tu compromiso cotidiano.
-    No hago milagros ni reemplazo tratamientos médicos: es un <strong>acompañamiento energético</strong> serio y respetuoso para que el cambio lo actives vos.
-  </p>
-  <ul class="list">
-    <li><strong>50/50:</strong> durante la sesión hago el trabajo energético; después, lo sostenés con hábitos simples (respiración, hidratación, descanso, límites).</li>
-    <li><strong>Procesos personales:</strong> algunos cambios se sienten al instante y otros de forma gradual; respetamos tu ritmo.</li>
-    <li><strong>Complementario:</strong> no reemplaza la atención médica o psicológica. Si estás en tratamiento, continuá con tu profesional.</li>
-  </ul>
-</section>
+      <h2>Importante</h2>
+      <p>
+        <span class="badge">No es un curso</span>
+        <strong>Sanar es un camino compartido.</strong> Yo sostengo la técnica y la energía; vos ponés tu apertura y tu compromiso cotidiano.
+        No hago milagros ni reemplazo tratamientos médicos: es un <strong>acompañamiento energético</strong> serio y respetuoso para que el cambio lo actives vos.
+      </p>
+      <ul class="list">
+        <li><strong>50/50:</strong> durante la sesión hago el trabajo energético; después, lo sostenés con hábitos simples (respiración, hidratación, descanso, límites).</li>
+        <li><strong>Procesos personales:</strong> algunos cambios se sienten al instante y otros de forma gradual; respetamos tu ritmo.</li>
+        <li><strong>Complementario:</strong> no reemplaza la atención médica o psicológica. Si estás en tratamiento, continuá con tu profesional.</li>
+      </ul>
+    </section>
 
     <section class="wrap card faq" style="margin-top:18px">
       <h2>Preguntas frecuentes</h2>
@@ -199,136 +199,98 @@
     © Sanación 11.11 — Sesiones de sanación energética a distancia
   </footer>
 
-  <!-- Tracking CTAs: Contact (sin valor) + Lead (con valor) -->
- <!-- Tracking CTAs: Contact (con valor + moneda) + Lead -->
-<script>
-  function trackContact(label, valueARS){
-    if (window.fbq) {
+  <!-- Añade "Ref: ..." con UTM al texto de WhatsApp -->
+  <script>
+    (function () {
+      function updateWA(id, ref) {
+        var a = document.getElementById(id);
+        if (!a) return;
+        try {
+          var url = new URL(a.href);
+          var current = url.searchParams.get('text') || '';
+          var decoded = current ? decodeURIComponent(current) : '';
+          if (decoded.indexOf('Ref:') === -1) {
+            var updated = decoded ? (decoded + '\n' + ref) : ref;
+            url.searchParams.set('text', updated);
+            a.href = url.toString();
+          }
+        } catch (e) {}
+      }
+      function run() {
+        var qs   = new URLSearchParams(location.search);
+        var camp = qs.get('utm_campaign') || '';
+        var adset= qs.get('utm_adset') || 'direct';
+        var ad   = qs.get('utm_content') || 'direct';
+        var ref  = 'Ref: ' + (camp ? (camp + ' | ') : '') + adset + ' | ' + ad;
+        ['ctaHero','ctaFuncionamiento','ctaSticky'].forEach(function(id){
+          updateWA(id, ref);
+          var el = document.getElementById(id);
+          if (el) el.addEventListener('click', function(){ updateWA(id, ref); });
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', run);
+      } else {
+        run();
+      }
+    })();
+  </script>
+
+  <!-- Envía clics a Google Sheets (Apps Script) -->
+  <script>
+    (function(){
+      function qs(name){
+        try { return new URL(location.href).searchParams.get(name) || '' } catch(e){ return '' }
+      }
+      window._pingClick = function(buttonId){
+        var payload = {
+          event: 'cta_click',
+          page: location.href.split('#')[0],
+          button: buttonId,
+          utm_campaign: qs('utm_campaign'),
+          utm_adset: qs('utm_adset'),
+          utm_content: qs('utm_content'),
+          fbclid: qs('fbclid'),
+          gclid: qs('gclid'),
+          referrer: document.referrer || '',
+          ua: navigator.userAgent
+        };
+        var url = 'https://script.google.com/macros/s/AKfycbxLkKq-r1T6KRIuXdoJlAqJF6-fULaNSTLEV5ajF4a7z5A_ulrh4D8_79UDxU2ZXVpZUg/exec';
+        try {
+          var blob = new Blob([JSON.stringify(payload)], {type: 'text/plain;charset=UTF-8'});
+          if (navigator.sendBeacon && navigator.sendBeacon(url, blob)) return;
+        } catch(e){}
+        try { fetch(url, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) }); } catch(e){}
+      };
+    })();
+  </script>
+
+  <!-- Dispara SOLO el evento estándar Contact (con valor y moneda) -->
+  <script>
+    // Envía a Meta Pixel: Contact con value + currency
+    function fireContact(label, valueARS){
+      if (!window.fbq) return;
       fbq('track','Contact', {
         content_name: label,
-        value: valueARS,      // número (sin miles)
-        currency: 'ARS'       // ISO-4217
-      });
-      fbq('trackCustom','CTA_Click',{ label });
-    }
-  }
-
-  function trackLead(label, valueARS){
-    if (window.fbq) {
-      fbq('track','Lead', {
-        content_name: label,
-        value: valueARS,
+        value: Number(valueARS),
         currency: 'ARS'
       });
+      try { console.log('[pixel] Contact ->', label, valueARS); } catch(e){}
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', function(){
-    var hero   = document.getElementById('ctaHero');
-    var func   = document.getElementById('ctaFuncionamiento');
-    var sticky = document.getElementById('ctaSticky');
-    var ig     = document.getElementById('ctaIG');
+    // Listeners de CTAs
+    document.addEventListener('DOMContentLoaded', function(){
+      var hero   = document.getElementById('ctaHero');            // Sesión completa
+      var func   = document.getElementById('ctaFuncionamiento');  // Lectura cartas
+      var sticky = document.getElementById('ctaSticky');          // Péndulo
+      var ig     = document.getElementById('ctaIG');              // Instagram
 
-    if (hero)  hero.addEventListener('click', function(){
-      _pingClick('ctaHero');
-      trackContact('CTA Hero – Sesión Holística', 18000);
-      trackLead('CTA Hero – Sesión Holística', 18000);
+      if (hero)   hero.addEventListener('click',  function(){ if (window._pingClick) _pingClick('ctaHero');          fireContact('CTA Hero – Sesión Holística', 18000); });
+      if (func)   func.addEventListener('click',  function(){ if (window._pingClick) _pingClick('ctaFuncionamiento'); fireContact('CTA Funcionamiento – Lectura de cartas', 12000); });
+      if (sticky) sticky.addEventListener('click', function(){ if (window._pingClick) _pingClick('ctaSticky');        fireContact('CTA Sticky – Péndulo Karnak', 12000); });
+      if (ig)     ig.addEventListener('click',     function(){ if (window._pingClick) _pingClick('ctaIG');            fireContact('CTA IG – Mensaje', 12000); });
     });
-
-    if (func)  func.addEventListener('click', function(){
-      _pingClick('ctaFuncionamiento');
-      trackContact('CTA Funcionamiento – Lectura de cartas', 12000);
-      trackLead('CTA Funcionamiento – Lectura de cartas', 12000);
-    });
-
-    if (sticky) sticky.addEventListener('click', function(){
-      _pingClick('ctaSticky');
-      trackContact('CTA Sticky – Péndulo Karnak', 12000);
-      trackLead('CTA Sticky – Péndulo Karnak', 12000);
-    });
-
-    if (ig) ig.addEventListener('click', function(){
-      _pingClick('ctaIG');
-      trackContact('CTA IG – Mensaje', 12000);
-      // si no querés duplicar eventos, podés NO mandar Lead acá
-      // trackLead('CTA IG – Mensaje', 12000);
-    });
-  });
-</script>
-<script>
-(function () {
-  function updateWA(id, ref) {
-    var a = document.getElementById(id);
-    if (!a) return;
-    try {
-      var url = new URL(a.href);
-      var current = url.searchParams.get('text') || '';
-      var decoded = current ? decodeURIComponent(current) : '';
-      if (decoded.indexOf('Ref:') === -1) {
-        var updated = decoded ? (decoded + '\n' + ref) : ref;
-        url.searchParams.set('text', updated);
-        a.href = url.toString();
-      }
-    } catch (e) {}
-  }
-
-  function run() {
-    var qs   = new URLSearchParams(location.search);
-    var camp = qs.get('utm_campaign') || '';
-    var adset = qs.get('utm_adset') || 'direct';
-    var ad    = qs.get('utm_content') || 'direct';
-    var ref = 'Ref: ' + (camp ? (camp + ' | ') : '') + adset + ' | ' + ad;
-
-    ['ctaHero','ctaFuncionamiento','ctaSticky'].forEach(function(id){
-      updateWA(id, ref);
-      var el = document.getElementById(id);
-      if (el) el.addEventListener('click', function(){ updateWA(id, ref); });
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-  } else {
-    run();
-  }
-})();
-</script>
-
-<!-- _pingClick: envía a Apps Script sin preflight -->
-<script>
-(function(){
-  function qs(name){
-    try { return new URL(location.href).searchParams.get(name) || '' } catch(e){ return '' }
-  }
-
-  function sendHit(buttonId){
-    var payload = {
-      event: 'cta_click',
-      page: location.href.split('#')[0],
-      button: buttonId,
-      utm_campaign: qs('utm_campaign'),
-      utm_adset: qs('utm_adset'),
-      utm_content: qs('utm_content'),
-      fbclid: qs('fbclid'),
-      gclid: qs('gclid'),
-      referrer: document.referrer || '',
-      ua: navigator.userAgent
-    };
-
-    var url = 'https://script.google.com/macros/s/AKfycbxLkKq-r1T6KRIuXdoJlAqJF6-fULaNSTLEV5ajF4a7z5A_ulrh4D8_79UDxU2ZXVpZUg/exec';
-
-    try {
-      var blob = new Blob([JSON.stringify(payload)], {type: 'text/plain;charset=UTF-8'});
-      if (navigator.sendBeacon && navigator.sendBeacon(url, blob)) return;
-    } catch(e){}
-
-    try {
-      fetch(url, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
-    } catch(e){}
-  }
-
-  window._pingClick = sendHit;
-})();
-</script>
+  </script>
 </body>
 </html>
+
